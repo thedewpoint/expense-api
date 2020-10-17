@@ -1,0 +1,16 @@
+[package]
+name = "expense-api"
+version = "0.1.0"
+authors = ["DJ <dj.bowden7@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+futures = "0.3"
+tokio = { version = "0.2", features = ["full"] }
+rocket = { git = "https://github.com/SergioBenitez/Rocket.git", branch = "master" }
+rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket.git", branch = "master", default-features = false, features = ["json"]}
+mongodb = "1.1.1"
+
+
