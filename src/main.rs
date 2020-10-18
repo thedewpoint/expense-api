@@ -9,6 +9,7 @@ async fn index() ->  String {
     
     "Hello, world!".to_string()
 }
+
 #[get("/dbs")]
 async fn test() -> Result<Json<Vec<String>>, NotFound<String>>{    
     match get_db_names().await {
@@ -24,8 +25,12 @@ async fn get_db_names() -> Result<Vec<String>, mongodb::error::Error>{
 
 
 // allows asynchronous main method
-#[tokio::main]
-  async fn  main() {
-      //.await on the end of launch to allow async routes
-    rocket::ignite().mount("/", routes![index,test]).launch().await;
+// #[tokio::main]
+//   async fn  main() {
+//       //.await on the end of launch to allow async routes
+//     rocket::ignite().mount("/", routes![index,test]).launch().await;
+// }
+#[launch]
+fn rocket() -> rocket::Rocket {
+    rocket::ignite().mount("/", routes![index,test])
 }
