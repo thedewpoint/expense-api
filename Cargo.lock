@@ -492,6 +492,7 @@ dependencies = [
  "mongodb",
  "rocket",
  "rocket_contrib",
+ "serde",
  "tokio",
 ]
 

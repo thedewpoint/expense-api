@@ -1,8 +1,8 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use] extern crate rocket;
-use mongodb::{Client};
 use rocket_contrib::json::Json;
 use rocket::response::status::NotFound;
+mod expense_service;
 
 #[get("/")]
 async fn index() ->  String {
@@ -10,20 +10,14 @@ async fn index() ->  String {
     "Hello, world!".to_string()
 }
 
-#[get("/dbs")]
-async fn test() -> Result<Json<Vec<String>>, NotFound<String>>{    
-    match get_db_names().await {
-        Ok(db_names) => Ok(Json(db_names)),
+#[get("/expenses")]
+async fn expenses_all() -> Result<Json<Vec<expense_service::Expense>>, NotFound<String>> {    
+    let expense_dao : expense_service::ExpenseDAO = expense_service::ExpenseDAO::new().await.expect("shit");
+     match expense_dao.get_all_expenses().await {
+        Ok(expenses) => Ok(Json(expenses)),
         Err(e) => Err(NotFound(e.to_string()))
     }
 }
-
-async fn get_db_names() -> Result<Vec<String>, mongodb::error::Error>{
-    let client = Client::with_uri_str("mongodb://localhost:27017/").await?;
-    Ok(client.list_database_names(None, None).await?)
-}
-
-
 // allows asynchronous main method
 // #[tokio::main]
 //   async fn  main() {
@@ -32,5 +26,5 @@ async fn get_db_names() -> Result<Vec<String>, mongodb::error::Error>{
 // }
 #[launch]
 fn rocket() -> rocket::Rocket {
-    rocket::ignite().mount("/", routes![index,test])
+    rocket::ignite().mount("/", routes![index, expenses_all])
 }
