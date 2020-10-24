@@ -1,6 +1,6 @@
 
 use futures::stream::StreamExt;
-use mongodb::{Client, bson, bson::oid::ObjectId, error::Result};
+use mongodb::{Client, bson, bson::doc, bson::oid::ObjectId, error::Result};
 use serde::{Serialize, Deserialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Expense {
@@ -24,14 +24,24 @@ pub struct Expense {
         })
      }
      pub async fn get_all_expenses(&self) -> Result<Vec<Expense>>{
-        let expenses = self.client.database(self.db_name).collection(self.collection);
-        let mut results = expenses.find(None,None).await?;
-        let mut result_vec: Vec<Expense> = vec!{};
-        while let Some(doc) = results.next().await {
-           let expense: Expense = bson::from_bson(bson::Bson::Document(doc?))?;
-           result_vec.push(expense);
-        }
-        Ok(result_vec)
+         let expenses = self.client.database(self.db_name).collection(self.collection);
+         let mut results = expenses.find(None,None).await?;
+         let mut result_vec: Vec<Expense> = Vec::new();
+         while let Some(doc) = results.next().await {
+            let expense: Expense = bson::from_bson(bson::Bson::Document(doc?))?;
+            result_vec.push(expense);
+         }
+         Ok(result_vec)
     }
+    pub async fn get_expense_by_id(&self,id: String) -> Result<Expense>{
+         let expenses = self.client.database(self.db_name).collection(self.collection);
+         println!("id is {}",id);
+         let doc = expenses.find_one(doc! {
+            "_id" : ObjectId::with_string(id.as_str()).expect("something went wrong")
+         },
+         None).await?;
+         let expense : Expense  = bson::from_bson(bson::Bson::Document(doc.unwrap()))?;
+         Ok(expense)
+   }
  }
 
