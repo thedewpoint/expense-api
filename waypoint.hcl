@@ -8,7 +8,7 @@ app "expense-api" {
 
   build {
     use "pack" {
-        builder="gcr.io/buildpacks/builder:v1"
+        builder="paketobuildpacks/builder:base"
     }
     registry {
       use "docker" {
