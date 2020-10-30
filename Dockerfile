@@ -1,4 +1,4 @@
-FROM rust:latest as build
+FROM rustlang/rust:nightly as build
 
 WORKDIR /usr/src/expense-api
 COPY . .
