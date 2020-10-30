@@ -7,9 +7,7 @@ app "expense-api" {
   }
 
   build {
-    use "pack" {
-        builder="paketobuildpacks/builder:base"
-    }
+    use "docker" {}
     registry {
       use "docker" {
         image = "dewyserver.duckdns.org:80/expense/expense-api"
