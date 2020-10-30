@@ -7,7 +7,9 @@ app "expense-api" {
   }
 
   build {
-    use "pack" {}
+    use "pack" {
+        builder="gcr.io/buildpacks/builder:v1"
+    }
     registry {
       use "docker" {
         image = "dewyserver.duckdns.org:80/expense/expense-api"
