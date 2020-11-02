@@ -1,11 +1,7 @@
-FROM rustlang/rust:nightly-slim as build
+FROM instrumentisto/rust:nightly-slim-2020-10-24 as build
 WORKDIR /usr/src/expense-api
 COPY . .
-
 RUN cargo install --locked --verbose --path .
-
-FROM alpine:latest
-
-COPY --from=build /usr/local/.cargo/bin/expense-api /usr/local/bin/expense-api
-
+FROM gcr.io/distroless/cc-debian10
+COPY --from=build /usr/local/cargo/bin/expense-api /usr/local/bin/expense-api
 CMD ["expense-api"]
