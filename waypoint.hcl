@@ -24,6 +24,7 @@ app "expense-api" {
 
   release {
     use "kubernetes" {
+        port = 8000
     }
   }
 }
