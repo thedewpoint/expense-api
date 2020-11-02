@@ -10,7 +10,7 @@ app "expense-api" {
     use "docker" {}
     registry {
       use "docker" {
-        image = "http://dewyserver.duckdns.org:80/expense/expense-api"
+        image = "dewyserver.duckdns.org:80/expense/expense-api"
         tag   = "latest"
       }
     }
