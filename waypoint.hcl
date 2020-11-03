@@ -19,11 +19,13 @@ app "expense-api" {
   deploy {
     use "kubernetes" {
       probe_path = "/"
+      service_port = 8000
     }
   }
 
   release {
     use "kubernetes" {
+        load_balancer = true
         port = 8000
     }
   }
